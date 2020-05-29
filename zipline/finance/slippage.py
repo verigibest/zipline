@@ -24,7 +24,7 @@ from toolz import merge
 
 from zipline.assets import Equity, Future
 from zipline.errors import HistoryWindowStartsBeforeData
-from zipline.finance.constants import ROOT_SYMBOL_TO_ETA
+from zipline.finance.constants import ROOT_SYMBOL_TO_ETA, DEFAULT_ETA 
 from zipline.finance.shared import AllowedAssetMarker, FinancialModelMeta
 from zipline.finance.transaction import create_transaction
 from zipline.utils.cache import ExpiringCache
@@ -584,7 +584,11 @@ class VolatilityVolumeShare(MarketImpactBase):
                              txn_volume,
                              mean_volume,
                              volatility):
-        eta = self._eta[order.asset.root_symbol]
+        try:
+            eta = self._eta[order.asset.root_symbol]
+        except:
+            eta = DEFAULT_ETA
+            
         psi = txn_volume / mean_volume
 
         market_impact = eta * volatility * math.sqrt(psi)

@@ -144,6 +144,7 @@ RegisteredBundle = namedtuple(
 BundleData = namedtuple(
     'BundleData',
     'asset_finder equity_minute_bar_reader equity_daily_bar_reader '
+    'future_minute_bar_reader future_daily_bar_reader '
     'adjustment_reader',
 )
 
@@ -521,6 +522,14 @@ def _make_bundle_core():
             equity_daily_bar_reader=BcolzDailyBarReader(
                 daily_equity_path(name, timestr, environ=environ),
             ),
+
+            future_minute_bar_reader=BcolzMinuteBarReader(
+                minute_equity_path(name, timestr, environ=environ),
+            ),
+            future_daily_bar_reader=BcolzDailyBarReader(
+                daily_equity_path(name, timestr, environ=environ),
+            ),
+            
             adjustment_reader=SQLiteAdjustmentReader(
                 adjustment_db_path(name, timestr, environ=environ),
             ),

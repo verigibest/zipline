@@ -266,8 +266,11 @@ class PerContract(FutureCommissionModel):
     def calculate(self, order, transaction):
         root_symbol = order.asset.root_symbol
         cost_per_contract = self._cost_per_contract[root_symbol]
-        exchange_fee = self._exchange_fee[root_symbol]
-
+        try:
+            exchange_fee = self._exchange_fee[root_symbol]
+        except:
+            exchange_fee = 0
+            
         return calculate_per_unit_commission(
             order=order,
             transaction=transaction,
